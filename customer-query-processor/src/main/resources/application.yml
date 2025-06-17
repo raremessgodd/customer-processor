@@ -1,0 +1,72 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: customer_query
+  cache:
+    type: redis
+    redis:
+      time-to-live: 300
+      use-key-prefix: true
+      cache-null-values: false
+      enable-statistics: false
+  data:
+    redis:
+      host: redis
+      port: 6379
+      password: admin
+    mongodb:
+      uri: mongodb://admin:admin@localhost:27017/customer_query?authSource=admin
+      uuid-representation: standard
+  rabbitmq:
+    password: admin
+    username: admin
+    host: localhost
+    port: 5672
+    listener:
+      simple:
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 1000
+          multiplier: 2.0
+        default-requeue-rejected: false
+rabbitmq:
+  queue:
+    bookings_created_name: booking.created.event.queue
+    bookings_modified_name: booking.modified.event.queue
+    bookings_cancelled_name: booking.cancelled.event.queue
+    bookings_completed_name: booking.completed.event.queue
+    restaurant_name: restaurant.event.queue
+  dlq:
+    queue:
+      bookings_created_name: booking.created.event.dlq
+      bookings_modified_name: booking.modified.event.dlq
+      bookings_cancelled_name: booking.cancelled.event.dlq
+      bookings_completed_name: booking.completed.event.dlq
+      restaurant_name: restaurant.event.dlq
+  key:
+    bookings_created_key: booking.created
+    bookings_modified_key: booking.modified
+    bookings_cancelled_key: booking.cancelled
+    bookings_completed_key: booking.completed
+    restaurant_key: restaurant
+  exchange:
+    bookings: booking.exchange
+    restaurant: restaurant.exchange
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,info,metric
+metrics:
+  export:
+    prometheus:
+      enabled: true
+  distribution:
+    percentiles-histogram:
+      http:
+        server:
+          requests: true
+        client:
+          requests: true

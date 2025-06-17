@@ -1,0 +1,71 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: customer_command
+  datasource:
+    url: jdbc:postgresql://localhost:5432/customer_command
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  liquibase:
+    enabled: false
+  rabbitmq:
+    username: admin
+    password: admin
+    host: localhost
+    port: 5672
+    listener:
+      simple:
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 1000
+          multiplier: 2.0
+rabbitmq:
+  queue:
+    bookings_created_name: booking.created.event.queue
+    bookings_modified_name: booking.modified.event.queue
+    bookings_cancelled_name: booking.cancelled.event.queue
+    bookings_completed_name: booking.completed.event.queue
+    restaurant_name: restaurant.event.queue
+  dlq:
+    queue:
+      bookings_created_name: booking.created.event.dlq
+      bookings_modified_name: booking.modified.event.dlq
+      bookings_cancelled_name: booking.cancelled.event.dlq
+      bookings_completed_name: booking.completed.event.dlq
+      restaurant_name: restaurant.event.dlq
+  key:
+    bookings_created_key: booking.created
+    bookings_modified_key: booking.modified
+    bookings_cancelled_key: booking.cancelled
+    bookings_completed_key: booking.completed
+    restaurant_key: restaurant
+  exchange:
+    bookings: booking.exchange
+    restaurant: restaurant.exchange
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus,info,metric
+metrics:
+  export:
+    prometheus:
+      enabled: true
+  distribution:
+    percentiles-histogram:
+      http:
+        server:
+          requests: true
+        client:
+          requests: true
