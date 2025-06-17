@@ -1,5 +1,5 @@
 1) mvn clean install
-2) docker build -t command-query-command -f command-query-command/Dockerfile . && docker build -t command-command-command -f command-command-command/Dockerfile .
+2) docker build -t command-query-processor -f command-query-processor/Dockerfile . && docker build -t command-command-processor -f command-command-processor/Dockerfile .
 4) docker-compose up -d
 
 Command API доступен на порту 8080
